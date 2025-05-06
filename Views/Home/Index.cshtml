@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@section Scripts {
+    <script>
+        //setTimeout(callback(),1000) //非同步
+        setTimeout(()=>{
+            console.log('A');
+        },1000)
+        setTimeout(()=>{
+            console.log('B');
+        },1000)
+        setTimeout(()=>{
+            console.log('C');
+        },1000)
+
+        const data = setTimeout('A',1000);  //同步 等1秒
+        const data = setTimeout('B',1000);
+        const data = setTimeout('C',1000);
+    </script>
+}
