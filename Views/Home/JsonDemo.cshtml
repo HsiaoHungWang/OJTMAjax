@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "JsonDemo";
+}
+
+<h1>JsonDemo</h1>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>年資</th>
+            <th>薪水</th>
+        </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+</table>
+
+@section Scripts{
+    <script src="~/js/travel.js"></script>
+
+    <script>
+        console.log(spots);
+        const emps = [{"name":"Tom","workYears":3,"salary":35000},
+                     {"name":"Jack","workYears":5,"salary":40000},
+                     {"name":"Mary","workYears":7,"salary":45000}];
+
+        //JSON資料讀取
+        //emps => array
+        //emps[2] => {"name":"Mary","workYears":7,"salary":45000} => object
+        //emps[2].name => Mary
+
+        //方法一 old
+        // for (let i = 0; i < emps.length; i++) {
+        //     console.log(emps[i].name);
+        // }
+        // 方法二 for...in  {key:value, key:value}
+        // for(var i in emps){
+        //     console.log(emps[i]);
+        // }
+
+        // 方法三 for...of
+        // for(var emp of emps){
+        //     console.log(emp.name);
+        // }
+
+        //方法四 Array.forEach()
+        // emps.forEach(emp=>{
+        //      console.log(emp.workYears);
+        // });
+
+       //顯示資料在網頁 Array.map()
+
+       const trDatas = emps.map(employee=>{
+          return `
+            <tr>
+             <td>${employee.name}</td>
+              <td>${employee.workYears}</td>
+              <td>${employee.salary}</td>
+            </tr>          
+          `
+       })
+        //querySelector('css selectors')
+       document.querySelector('.table tbody').innerHTML = trDatas.join("");
+        
+
+    </script>
+}
