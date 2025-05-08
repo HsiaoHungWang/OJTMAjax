@@ -31,17 +31,17 @@
         // },1000)
 
 
-        // setTimeout(()=>{
-        //     console.log('A');
-        //     這個setTimeout要確定A先印出才能執行
-        //     setTimeout(()=>{
-        //          console.log('B');
-        //          這個setTimeout要確定B先印出才能執行
-        //         setTimeout(()=>{
-        //             console.log('C');
-        //         },1000)
-        //     },1000)
-        // },1000)
+        setTimeout(()=>{
+            console.log('A');
+            這個setTimeout要確定A先印出才能執行
+            setTimeout(()=>{
+                 console.log('B');
+                 這個setTimeout要確定B先印出才能執行
+                setTimeout(()=>{
+                    console.log('C');
+                },1000)
+            },1000)
+        },1000)
 
         // const data = setTimeout('A',1000);  同步 等1秒
         // const data = setTimeout('B',1000);

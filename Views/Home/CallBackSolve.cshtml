@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "CallBackSolve";
+}
+
+<h1>CallBackSolve</h1>
+
+@section Scripts{
+    <script>
+        //ES6 Promise
+        //建立 Promise 物件
+        var promise  = new Promise((resolve, reject)=>{
+             //非同步程式碼放在這裡
+
+
+             if(false){
+                 //成功
+                resolve("成功");
+             }else{
+                //失敗
+                reject("失敗");
+             }
+
+            //a x resolve 程式執行成功把資料透過這個function回傳
+            //b y reject 程式執行失敗把錯誤訊息透過這個function回傳
+        });
+
+        //使用 Promise 物件
+        promise
+        .then((data)=>{  //接收reolve回傳的資料
+            //成功的話執行這裡 
+            console.log(data);
+        })
+        .catch((error)=>{
+            //失敗的話執行這裡
+            console.log(`有錯誤：${error}`);
+        })
+        .finally(()=>{
+            console.log('end');
+        });
+
+        const printSomething = (data)=>{
+            const promise = new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    resolve(data);
+                },1000)
+            }) 
+            return promise;
+        }
+
+       // printSomething("A")
+       // .then(data=>{
+       //     console.log(data);
+       //     return printSomething("B");
+       // })
+       // .then(data=>{
+       //      console.log(data);
+       //      return printSomething("C");
+       //  })
+       // .then(data=>{
+       //      console.log(data);
+       //  });
+
+        //ES7 async await
+        //非同步的程式碼寫成跟同步一樣
+
+        const useAsyncAwait = async ()=>{
+            let data = await printSomething("A");
+            console.log(data);
+            data = await printSomething("B");
+            console.log(data);
+            data = await printSomething("C");
+            console.log(data);
+        }
+
+         useAsyncAwait();
+    </script>
+
+}
+

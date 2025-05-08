@@ -23,6 +23,11 @@ namespace OJTMAjax.Controllers
             return View();
         }
 
+        public IActionResult CallBackSolve()
+        {
+            return View();
+        }
+
         public IActionResult JsonDemo()
         {
             return View();
