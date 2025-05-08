@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "FirstAjax";
+}
+
+<h1>FirstAjax</h1>
+<button id="button1">Click</button>
+<div id="div1"></div>
+
+@section Scripts{
+    <script>
+         //fetch 是一個function
+         //使用 fetch 也會得到 promise 物件
+       console.log(fetch('/api/index'));  //promise
+        fetch('/api/index')
+        .then(Response=>{
+              console.log(Response);
+              //回應是文字內容透過text()讀資料
+              return Response.text();
+        })
+        .then(data=>{
+            console.log(data);
+        })
+
+    </script>
+}
+

@@ -39,6 +39,8 @@
             console.log('end');
         });
 
+        //printSomething 是一個function
+        //呼叫 printSomething 會得到一個Promise物件
         const printSomething = (data)=>{
             const promise = new Promise((resolve,reject)=>{
                 setTimeout(()=>{
@@ -47,6 +49,7 @@
             }) 
             return promise;
         }
+
 
        // printSomething("A")
        // .then(data=>{
