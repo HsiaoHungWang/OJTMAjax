@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MSITApp.Models.DTO;
 using OJTMAjax.Models;
 using OJTMAjax.Models.DTO;
 using System.Security.Cryptography;
@@ -141,6 +142,46 @@ namespace OJTMAjax.Controllers
                 numBytesRequested: 256 / 8);  // 產生密鑰的長度 32 bytes(256-bit) 的雜湊值
           
             return Convert.ToBase64String(hashed);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string email = login.Email ?? string.Empty; // 確保 email 不為 null
+            string? pwd = login.Password;
+
+            if (pwd == null)
+            {
+                return BadRequest(new { Message = "密碼不能為空" });
+            }
+
+            
+            Member? member = await db.Members.FirstOrDefaultAsync(m => m.Email != null && m.Email.Equals(email));
+
+            if (member == null)
+            {
+                return NotFound(new { Message = "找不到會員" });
+            }
+
+            if (member.Password == null || member.Salt == null)
+            {
+                return BadRequest(new { Message = "會員資料不完整，無法驗證密碼" });
+            }
+
+            bool isPasswordValid = VerifyPassword(pwd, member.Password, member.Salt);
+            if (isPasswordValid)
+            {
+                return Ok(new { Message = "登入成功", Email = email });
+            }
+            else
+            {
+                return Unauthorized(new { Message = "密碼驗證失敗" });
+            }
         }
 
         private static bool VerifyPassword(string enteredPassword, string storedHashBase64, string storedSaltBase64)
