@@ -86,7 +86,7 @@ namespace OJTMAjax.Controllers
         //public IActionResult Register(string name, string email, int age=20)
         //public IActionResult Register(UserDTO _user)
         [HttpPost]
-        public IActionResult Register(Member _user, IFormFile Avatar)
+        public async Task<IActionResult> Register(Member _user, IFormFile Avatar)
         {
             if (_user.Password == null)
             {
@@ -117,10 +117,10 @@ namespace OJTMAjax.Controllers
             _user.FileName = Avatar.FileName;
 
             //新增
-            db.Members.Add(_user);
-            db.SaveChanges();
+            await db.Members.AddAsync(_user);
+            await db.SaveChangesAsync();
 
-            return Content(filePath, "text/plain");
+            return Ok(new { Message = "新增成功" });
         }
 
         public static byte[] GenerateSalt(int size = 16)
@@ -213,9 +213,7 @@ namespace OJTMAjax.Controllers
             string keyword = "";
             if (!string.IsNullOrEmpty(searchDTO.keyword))
             {
-                keyword = searchDTO.keyword;
-                // Fix for CS8602: Possible null reference dereference
-                // Add null checks for `SpotTitle` and `SpotDescription` before calling `Contains`.
+                keyword = searchDTO.keyword;             
 
                 spots = spots.Where(s =>
                     (s.SpotTitle != null && s.SpotTitle.Contains(searchDTO.keyword)) ||
@@ -260,6 +258,22 @@ namespace OJTMAjax.Controllers
 
             //return Content(keyword, "text/plain", System.Text.Encoding.UTF8 );
             return Json(spotsPaging);
+        }
+
+        public async Task<IActionResult> Keyword(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                keyword = "";
+            }
+         
+            var titles = await db.Spots.Where(s => s.SpotTitle != null && s.SpotTitle.Contains(keyword))
+                                 .OrderBy(s => s.SpotId)
+                                 .Select(s => s.SpotTitle)
+                                 .Take(8).ToListAsync();
+
+            return Json(titles);
+
         }
     }
 }
