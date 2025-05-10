@@ -49,15 +49,28 @@
            })
 
            selCity.innerHTML = opts.join("");
-
+            //載入鄉鎮區
            loadSite();
         })();
 
         //事件發生要執行函式
          selCity.addEventListener('change',()=>{
+             //載入鄉鎮區
              loadSite();
             divAddress.textContent = selCity.value;
         })
+
+        selSite.addEventListener('change',()=>{
+            //載入路名
+            loadRoad();
+            divAddress.textContent = `${selSite.value}`;
+        })
+
+        selRoad.addEventListener('change',()=>{
+            divAddress.textContent = `${selSite.value} ${selRoad.value}`;
+        })
+
+      
 
         //根據縣市讀取鄉鎮區的資料
         const loadSite = async()=>{
@@ -71,6 +84,22 @@
             })
 
             selSite.innerHTML = optSites.join("");
+
+            //載入路名
+            loadRoad();
+        }
+
+        //根據鄉鎮區讀取路名
+        const loadRoad =async ()=>{
+            const url = `@Url.Content("~/api/roads")?site=${selSite.value}`;
+            const response = await fetch(url);
+            const datas = await response.json();
+            const optRoads = datas.map(road=>{
+                return `
+                    <option value="${road}">${road}</option>
+                `
+            })
+            selRoad.innerHTML = optRoads.join("");
         }
 
     </script>
