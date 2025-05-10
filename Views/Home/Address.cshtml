@@ -6,6 +6,10 @@
 <h1>Address</h1>
 <select id="selectCity">   
 </select>
+<select id="selectSite">
+</select>
+<select id="selectRoad">
+</select>
 <div id="div1"></div>
 
 @section Scripts{
@@ -18,6 +22,8 @@
         // })();
 
         const selCity = document.querySelector('#selectCity');
+        const selSite = document.querySelector('#selectSite');
+        const selRoad = document.querySelector('#selectRoad');
         const divAddress = document.querySelector('#div1');
        
         (async()=>{
@@ -43,11 +49,29 @@
            })
 
            selCity.innerHTML = opts.join("");
+
+           loadSite();
         })();
 
+        //事件發生要執行函式
          selCity.addEventListener('change',()=>{
+             loadSite();
             divAddress.textContent = selCity.value;
         })
+
+        //根據縣市讀取鄉鎮區的資料
+        const loadSite = async()=>{
+            const url = `@Url.Content("~/api/sites")?city=${selCity.value}`
+            const response = await fetch(url);
+            const datas = await response.json();
+            const optSites = datas.map(site=>{
+               return `
+                  <option value="${site}">${site}</option>
+               `
+            })
+
+            selSite.innerHTML = optSites.join("");
+        }
 
     </script>
 }

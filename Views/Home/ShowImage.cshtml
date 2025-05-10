@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "ShowImage";
+}
+
+<h1>ShowImage</h1>
+<img id="img1" />
+
+@section Scripts{
+    <script>
+        const myImg = document.querySelector('#img1');
+
+        (async()=>{
+        const url = '@Url.Content("~/api/Avatar1/4")';
+        const response = await fetch(url);
+        const datas = await response.blob(); //從 response 物件中的body，取出二進資料
+
+        //顯示
+        myImg.src = URL.createObjectURL(datas);
+
+
+
+        
+        })();
+        
+    </script>
+}
