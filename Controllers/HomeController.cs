@@ -23,11 +23,14 @@ namespace OJTMAjax.Controllers
             return View();
         }
 
+        //說明Promise、aysnc await
         public IActionResult CallBackSolve()
         {
             return View();
         }
 
+        //複習JSON資料讀取的語法
+        //資料顯示
         public IActionResult JsonDemo()
         {
             return View();

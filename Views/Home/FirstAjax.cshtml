@@ -9,18 +9,34 @@
 
 @section Scripts{
     <script>
+        const btn = document.querySelector('#button1');
+         const myDiv = document.querySelector('#div1');
+          btn.addEventListener('click',()=>{
+                fetch('/api/index')
+                 .then(Response=>{
+                       console.log(Response);
+                       //回應是文字內容透過text()讀資料又會得到Promise物件
+                       return Response.text();
+                 })
+                 .then(data=>{
+                      console.log(data);
+                      myDiv.textContent = data;
+                 })
+          })
+
+
          //fetch 是一個function
          //使用 fetch 也會得到 promise 物件
-       console.log(fetch('/api/index'));  //promise
-        fetch('/api/index')
-        .then(Response=>{
-              console.log(Response);
-              //回應是文字內容透過text()讀資料
-              return Response.text();
-        })
-        .then(data=>{
-            console.log(data);
-        })
+       // console.log(fetch('/api/index'));  promise
+       //  fetch('/api/index')
+       //  .then(Response=>{
+       //        console.log(Response);
+       //        回應是文字內容透過text()讀資料
+       //        return Response.text();
+       //  })
+       //  .then(data=>{
+       //      console.log(data);
+       //  })
 
     </script>
 }

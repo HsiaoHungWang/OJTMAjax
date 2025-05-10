@@ -38,6 +38,7 @@ namespace OJTMAjax.Controllers
         }
 
         //根據城市讀取所有鄉鎮區
+        [HttpGet]
         public async Task<IActionResult> Sites(string city)
         {
             var sites = await db.Addresses.Where(a => a.City == city).Select(a => a.SiteId).Distinct().ToListAsync();
@@ -203,6 +204,7 @@ namespace OJTMAjax.Controllers
         }
 
         //傳入JSON資料
+        [HttpPost]
         public IActionResult Spots([FromBody] SearchDTO searchDTO)
         {
             //根據景點分類讀取景點資料
