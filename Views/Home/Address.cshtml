@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "Address";
+}
+
+<h1>Address</h1>
+<select id="selectCity">   
+</select>
+<div id="div1"></div>
+
+@section Scripts{
+    <script>
+        //async => function 前 ， await Promise 前
+           
+        //IIFE 立即執行函式
+        // (()=>{
+
+        // })();
+
+        const selCity = document.querySelector('#selectCity');
+        const divAddress = document.querySelector('#div1');
+       
+        (async()=>{
+          const url = '@Url.Content("~/api/Cities")';
+          //步驟一
+          const response = await fetch(url);
+          if(!response.ok){
+            throw new Error('api 串接失敗');
+          }
+          //步驟二
+           const datas = await response.json();
+           
+           //步驟三讀取JSON資料
+           // datas.map((city)=>{
+           //     console.log(city);
+           // })
+
+           //步驟四顯示資料
+           const opts = datas.map((city)=>{
+               return `
+                  <option value="${city}">${city}</option>
+               `             
+           })
+
+           selCity.innerHTML = opts.join("");
+        })();
+
+         selCity.addEventListener('change',()=>{
+            divAddress.textContent = selCity.value;
+        })
+
+    </script>
+}
+
