@@ -15,16 +15,49 @@
      const btnStop = document.querySelector('#buttonStop');
      const myDiv = document.querySelector('#div1');
      const imgLoading = document.querySelector('#img1');
+        let aboutController;
 
+        btnStop.addEventListener('click',()=>{
+               if(aboutController){
+                   aboutController.abort(); //停止 fetch() 請求
+            }
+        })
 
         btnStart.addEventListener('click',async ()=>{
-               imgLoading.style.display = 'inline';
-               const url = '@Url.Content("~/api/index1")?userName=Tom';
-               //console.log(url);
-               const response = await fetch(url);
-               const data = await response.text();
-               myDiv.textContent = data;
-               imgLoading.style.display = 'none';
+             try{
+                 //Ajax開始顯示執行中圖示
+                   imgLoading.style.display = 'inline';
+                   //按鈕停用
+                   btnStart.setAttribute('disabled','disabled');
+                   //建立AbortController物件
+                   aboutController = new AbortController();
+                    const signal = aboutController.signal;
+
+                   const url = '@Url.Content("~/api/index1")?userName=Tom';
+                   //console.log(url);
+                   const response = await fetch(url,{signal});
+                   const data = await response.text();
+                   myDiv.textContent = data;
+             }
+             catch(error)
+             {
+                console.log(`ErrorName：${error.name}`);
+                console.log(`ErrorMessage：${error.message}`);
+                   if(error.name === 'AbortError'){
+                       myDiv.textContent = '請求已被中止';
+                   }
+                   else{
+                     myDiv.textContent = 'api 串接失敗';
+                   }
+             }
+             finally{
+                //Ajax完成隱藏執行中圖示
+                imgLoading.style.display = 'none';
+                 //按鈕啟用
+                 btnStart.removeAttribute('disabled');
+             }
+              
+               
 
              
         })
