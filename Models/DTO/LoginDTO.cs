@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MSITApp.Models.DTO
+namespace OJTMAjax.Models.DTO
 {
     public class LoginDTO
     {   
