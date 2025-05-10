@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <h2>會員註冊</h2>
+        <form id="registerForm">
+            <div class="mb-3">
+                <label for="inputName" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="inputName" name="Name">
+                <div id="emailHelp" class="form-text"></div>
+            </div>
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">電子郵件</label>
+                <input type="email" class="form-control" id="inputEmail" name="Email">               
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">密碼</label>
+                <input type="password" class="form-control" id="inputPassword" name="Password">
+            </div>
+            <div class="mb-3">
+                <label for="inputAge" class="form-label">年紀</label>
+                <input type="number" class="form-control" id="inputAge" name="Age">
+            </div>
+            <div class="mb-3">
+                <label for="inputAddress" class="form-label">住址</label>
+                <input type="text" class="form-control" id="inputAddress" name="Address">
+            </div>
+           
+            <button type="submit" id="buttonSubmit" class="btn btn-primary">註冊</button>
+        </form>
+    </div>
+    <div class="col-4"></div>
+</div>
+
+@section Scripts {
+    <script>
+        const btnSubmit = document.querySelector('#buttonSubmit');
+        btnSubmit.addEventListener('click',async (event)=>{
+
+                 //event => 事件物件
+         event.preventDefault(); //取消預設行為
+
+        const url = `@Url.Content("~/api/register")`;
+        const regForm = document.querySelector('#registerForm'); //找到表單
+        const formData =new FormData(regForm); //把表單資料放進FormData  key=value
+
+        // 測試：確定formData有資料
+        // for(const pair of formData.entries()){
+        //     console.log(`${pair[0]}:${pair[1]}`)
+        // }
+
+        const response = await fetch(url,{
+            method:'POST',
+            body:formData
+        });
+        const data = await response.json();
+        console.log(data.message);
+
+        })
+
+    </script>
+}

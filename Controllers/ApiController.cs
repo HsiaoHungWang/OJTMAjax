@@ -89,35 +89,36 @@ namespace OJTMAjax.Controllers
         //public IActionResult Register(string name, string email, int age=20)
         //public IActionResult Register(UserDTO _user)
         [HttpPost]
-        public async Task<IActionResult> Register(Member _user, IFormFile Avatar)
+        //public async Task<IActionResult> Register(Member _user, IFormFile Avatar)
+        public async Task<IActionResult> Register(Member _user)
         {
-            if (_user.Password == null)
-            {
-                return BadRequest("Password cannot be null.");
-            }
+            //if (_user.Password == null)
+            //{
+            //    return BadRequest("Password cannot be null.");
+            //}
 
-            //取得實際路徑
-            string filePath = Path.Combine(env.WebRootPath, "images", Avatar.FileName);
-            //檔案上傳
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                Avatar.CopyTo(stream);
-            }
+            ////取得實際路徑
+            //string filePath = Path.Combine(env.WebRootPath, "images", Avatar.FileName);
+            ////檔案上傳
+            //using (var stream = new FileStream(filePath, FileMode.Create))
+            //{
+            //    Avatar.CopyTo(stream);
+            //}
 
-            //把檔案轉成二進位 
-            using (var ms = new MemoryStream())
-            {
-                Avatar.CopyTo(ms);
-                _user.FileData = ms.ToArray();
-            }
+            ////把檔案轉成二進位 
+            //using (var ms = new MemoryStream())
+            //{
+            //    Avatar.CopyTo(ms);
+            //    _user.FileData = ms.ToArray();
+            //}
 
-            // 將salt轉成字串寫進資料庫中
-            byte[] salt = GenerateSalt();
-            _user.Salt = Convert.ToBase64String(salt);
-            //將密碼透過salt加密後寫進資料庫中
-            _user.Password = HashPassword(_user.Password, salt);
+            //// 將salt轉成字串寫進資料庫中
+            //byte[] salt = GenerateSalt();
+            //_user.Salt = Convert.ToBase64String(salt);
+            ////將密碼透過salt加密後寫進資料庫中
+            //_user.Password = HashPassword(_user.Password, salt);
 
-            _user.FileName = Avatar.FileName;
+            //_user.FileName = Avatar.FileName;
 
             //新增
             await db.Members.AddAsync(_user);
