@@ -22,6 +22,8 @@ namespace OJTMAjax.Controllers
         {
             return Content("Ajax 好!!","text/plain", System.Text.Encoding.UTF8);
         }
+
+        //api/index1?userName=Tom
         public IActionResult Index1(string userName)
         {
             System.Threading.Thread.Sleep(5000); //模擬延遲
