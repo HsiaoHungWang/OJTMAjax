@@ -33,14 +33,22 @@
                    aboutController = new AbortController();
                     const signal = aboutController.signal;
 
+
+                       setTimeout(()=>{
+                          aboutController.abort();
+                      },3000)
+
                    const url = '@Url.Content("~/api/index1")?userName=Tom';
                    //console.log(url);
                    const response = await fetch(url,{signal});
                    const data = await response.text();
                    myDiv.textContent = data;
+
+                 
              }
              catch(error)
              {
+                console.log(error);
                 console.log(`ErrorName：${error.name}`);
                 console.log(`ErrorMessage：${error.message}`);
                    if(error.name === 'AbortError'){
