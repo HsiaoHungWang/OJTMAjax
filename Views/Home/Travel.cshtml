@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "Travel";
+}
+
+<h1>Travel</h1>
+<div id="div1" class="row row-cols-1 row-cols-md-3 g-4">
+   
+   
+</div>
+
+@section Scripts{
+    <script src="~/js/travel.js"></script>
+    <script>
+        const datas = spots.CommonFormat.Section;
+        const htmlDatas = datas.map(spot=>{
+            const {stitle, xbody, address, file} = spot;
+            // console.log(file.img[0] && file.img[0].text);
+            let imgUrl = "/images/noImage.jpg";
+            //undefined > !false > true
+            if(file.img[0]){
+               imgUrl = file.img[0].text;
+            }
+           return `
+            <div class="col">
+                <div class="card">
+                    <img src="${imgUrl}" class="card-img-top" alt="${stitle}">
+                    <div class="card-body">
+                        <h5 class="card-title">${stitle}</h5>
+                        <p class="card-text">${xbody.substring(0,100)}...</p>
+                    </div>
+                       <div class="card-footer">
+          <small class="text-body-secondary">${address}</small>
+        </div>
+                </div>
+            </div>
+           
+           `
+        })
+
+         document.querySelector('#div1').innerHTML = htmlDatas.join('');
+    </script>
+}
+
