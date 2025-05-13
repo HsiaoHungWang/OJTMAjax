@@ -4,17 +4,33 @@
 }
 
 <h1>Spots</h1>
-
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">            
+               
+                     
+            </ul>
+        </nav>
+    </div>
+    <div class="col-3">
+        <input type="search" class="form-control" id="inputSearch" placeholder="景點搜尋" />
+    </div>
+</div>
+<div id="div1" class="row row-cols-1 row-cols-md-3 g-4">
+</div>
 
 @section Scripts{
     <script>
         const url = '@Url.Content("~/api/Spots")';
+        const divSpots = document.querySelector('#div1');
         const searchData = {
             "categoryId":0,
             "keyword":"北投",
-            "page":4,
-            "pageSize":15,
-            "sortType":"asc",
+            "page":1,
+            "pageSize":9,
+            "sortType":"desc",
             "sortBy":"",
         }
         const loadSpots = async ()=>{
@@ -26,8 +42,53 @@
                 }
             });
             const data = await response.json();
-            console.log(data);
+            
+            const htmlDatas = data.spotsResult.map(spot=>{
+                const {spotId, spotTitle, spotDescription, address, spotImage} = spot;
+
+                return `
+                   <div class="col">
+                <div class="card">
+                    <img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
+                    <div class="card-body">
+                        <h5 class="card-title">${spotId} ${spotTitle}</h5>
+                        <p class="card-text">${spotDescription.substring(0,100)}...</p>
+                    </div>
+                    <div class="card-footer">
+                      <small class="text-body-secondary">${address}</small>
+                    </div>
+                </div>
+            </div>                
+                `
+            })
+            divSpots.innerHTML = htmlDatas.join('');
+
+            //分頁按鈕
+             let str = '';
+             for(let i=1, max=data.totalPages; i<=max; i++){
+                str += `<li class="page-item" onclick="paging(${i})"><a class="page-link" href="#">${i}</a></li>`;
+             }
+             document.querySelector('.pagination').innerHTML = str;
         }
+       
+    
+        //載入景點資料
         loadSpots();
+
+        //分頁程式
+        const paging = page=>{
+            searchData.page = page;
+            loadSpots();
+        }
+
+        //關鍵字搜尋
+        document.querySelector('#inputSearch').addEventListener('keyup',event=>{
+            //console.log(event); //event 事件物件
+            if(event.which === 13){ //Enter Key
+                searchData.keyword = event.target.value;
+                searchData.page = 1; //回到第一頁
+                loadSpots();
+            }
+        })
     </script>
 }
