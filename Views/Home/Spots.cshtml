@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Spots";
+}
+
+<h1>Spots</h1>
+
+
+@section Scripts{
+    <script>
+        const url = '@Url.Content("~/api/Spots")';
+        const searchData = {
+            "categoryId":0,
+            "keyword":"北投",
+            "page":4,
+            "pageSize":15,
+            "sortType":"asc",
+            "sortBy":"",
+        }
+        const loadSpots = async ()=>{
+            const response = await fetch(url,{
+                method: 'POST',
+                body:JSON.stringify(searchData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+        loadSpots();
+    </script>
+}
