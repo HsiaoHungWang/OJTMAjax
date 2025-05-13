@@ -12,7 +12,7 @@
             <div class="mb-3">
                 <label for="inputName" class="form-label">姓名</label>
                 <input type="text" class="form-control" id="inputName" name="Name">
-                <div id="emailHelp" class="form-text"></div>
+                <div id="nameHelp" class="form-text"></div>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">電子郵件</label>
@@ -39,7 +39,24 @@
 
 @section Scripts {
     <script>
+        const inpName = document.querySelector('#inputName');
+        const divNameHelper = document.querySelector('#nameHelp');        
         const btnSubmit = document.querySelector('#buttonSubmit');
+
+        inpName.addEventListener('blur', async ()=>{
+            // console.log(inpName.value);
+            const url = `@Url.Content("~/api/CheckAccount")?name=${inpName.value}`
+            const response = await fetch(url);
+            const data = await response.text();  //text()、json()、blob()
+            if(data === "True"){
+                divNameHelper.textContent ="帳號已存在";
+            }else{
+                divNameHelper.textContent ="帳號可以使用";
+            }
+        })
+
+
+
         btnSubmit.addEventListener('click',async (event)=>{
 
                  //event => 事件物件
