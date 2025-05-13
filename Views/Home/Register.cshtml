@@ -30,6 +30,10 @@
                 <label for="inputAddress" class="form-label">住址</label>
                 <input type="text" class="form-control" id="inputAddress" name="Address">
             </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">檔案上傳</label>
+                <input class="form-control" type="file" id="formFile" name="Avatar">
+            </div>
            
             <button type="submit" id="buttonSubmit" class="btn btn-primary">註冊</button>
         </form>
@@ -71,9 +75,10 @@
         //     console.log(`${pair[0]}:${pair[1]}`)
         // }
 
+        //傳送 formData 到 api，要使用 HTTP POST 方法
         const response = await fetch(url,{
             method:'POST',
-            body:formData
+            body:formData  //JSONData
         });
         const data = await response.json();
         console.log(data.message);
