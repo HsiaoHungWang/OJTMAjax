@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "AutoComplete";
+}
+
+<h1>AutoComplete</h1>
+
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <input type="text" class="form-control mb-3" id="autocomplete">
+
+        <div class="list-group" id="div1">
+         
+        </div>
+    </div>
+    <div class="col-4"></div>
+</div>
+
+@section Scripts{
+    <script>
+        const inputAutoComplete = document.querySelector('#autocomplete');
+        inputAutoComplete.addEventListener('input', async(event)=>{
+            console.log(event.target.value);
+            const url = `@Url.Content("~/api/keyword")?keyword=${event.target.value}`;
+            const response = await fetch(url);
+            const titles = await response.json();
+
+            const htmlTitles = titles.map(title => `<button onclick="inputAutoComplete.value='${title}'" type="button" class="list-group-item">${title}</button>`);
+           document.querySelector('#div1').innerHTML = htmlTitles.join('');
+        })
+
+
+      
+    </script>
+}
