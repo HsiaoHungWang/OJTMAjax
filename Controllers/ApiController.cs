@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -266,6 +267,18 @@ namespace OJTMAjax.Controllers
             //return Content(keyword, "text/plain", System.Text.Encoding.UTF8 );
             return Json(spotsPaging);
         }
+
+        public async Task<IActionResult> Categories()
+        {
+            var _categories = await db.SpotsCategories.Select(s=> new CategoryDTO
+            {
+                CategoryId = s.CategoryId,
+                CategoryName = s.CategoryName
+            }).ToListAsync();
+            return Json(_categories);
+
+        }
+
 
         public async Task<IActionResult> Keyword(string keyword)
         {

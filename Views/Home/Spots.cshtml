@@ -5,53 +5,91 @@
 
 <h1>Spots</h1>
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
+    <div class="col-3">
+        <select class="form-select" id="selectPageSize">
+            <option value="6">每頁6筆資料</option>
+            <option value="9" selected>每頁9筆資料</option>
+            <option value="12">每頁12筆資料</option>
+            <option value="15">每頁15筆資料</option>
+        </select>
+    </div>
+    <div class="col-5">
         <nav aria-label="Page navigation example">
-            <ul class="pagination">            
+            <ul class="pagination">           
                
                      
             </ul>
         </nav>
     </div>
-    <div class="col-3">
+    <div class="col-2">
+        <select class="form-select" id="selectSort">
+            <option value="spotTitle">景點名稱升冪</option>
+            <option value="-spotTitle">景點名稱降冪</option>
+            <option value="categoryId">分類編號升冪</option>
+            <option value="-categoryId">分類編號降冪</option>
+        </select>
+    </div>
+    <div class="col-2">
         <input type="search" class="form-control" id="inputSearch" placeholder="景點搜尋" />
     </div>
 </div>
+
+<div>
+    <ul id="ulCategories" class="list-group list-group-horizontal mb-3">
+      
+      
+    </ul>
+</div>
+
 <div id="div1" class="row row-cols-1 row-cols-md-3 g-4">
 </div>
 
 @section Scripts{
     <script>
         const url = '@Url.Content("~/api/Spots")';
-        const divSpots = document.querySelector('#div1');
+        const divSpots = document.querySelector('#div1');        
+
         const searchData = {
             "categoryId":0,
             "keyword":"北投",
             "page":1,
             "pageSize":9,
-            "sortType":"desc",
+            "sortType":"asc",
             "sortBy":"",
         }
+
+        //讀取景點分類資料 IIFE
+      const loadCategories = async ()=>{
+              const response = await fetch('@Url.Content("~/api/categories")');
+               const datas = await response.json();
+                 //  <li class="list-group-item">An item</li>
+                 const lis = datas.map(category=>{
+                       const {categoryId, categoryName} = category;
+                       return `<li class="list-group-item"  onclick="selectCategory(${categoryId})">${categoryName}</li>`;
+                 });
+                      document.querySelector('#ulCategories').innerHTML = lis.join('');
+      };
+        loadCategories();
+
         const loadSpots = async ()=>{
             const response = await fetch(url,{
                 method: 'POST',
-                body:JSON.stringify(searchData),
+                body:JSON.stringify(searchData), //JSON物件要傳到伺服器需要先轉型成JSON String
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
             const data = await response.json();
-            
+            console.log(data);
+            //讀取及顯示景點資料
             const htmlDatas = data.spotsResult.map(spot=>{
-                const {spotId, spotTitle, spotDescription, address, spotImage} = spot;
-
+                const {spotId, spotTitle, spotDescription, address, spotImage, categoryId} = spot;
                 return `
                    <div class="col">
                 <div class="card">
                     <img src="${spotImage}" class="card-img-top" alt="${spotTitle}">
                     <div class="card-body">
-                        <h5 class="card-title">${spotId} ${spotTitle}</h5>
+                         <h5 class="card-title">${categoryId} - ${spotId} ${spotTitle}</h5>
                         <p class="card-text">${spotDescription.substring(0,100)}...</p>
                     </div>
                     <div class="card-footer">
@@ -90,5 +128,30 @@
                 loadSpots();
             }
         })
-    </script>
+
+        //每頁顯示幾筆資料
+       document.querySelector('#selectPageSize').addEventListener('change', event=>{
+           const pageSize = event.target.value; //讀取使用者選擇的資料
+           searchData.pageSize = pageSize; //更新每頁顯示幾筆資料
+           searchData.page = 1; //回到第一頁
+           loadSpots(); //重新載入資料
+       });
+
+       //排序
+        document.querySelector('#selectSort').addEventListener('change', event=>{
+             const sort = event.target.value;   //-categoryId => - 降冪
+             searchData.sortType = sort.startsWith('-') ?  'desc' : 'asc'; //判斷排序方式
+             searchData.sortBy = sort.replace('-',''); //去掉'-'字元
+             searchData.page = 1; //回到第一頁
+             loadSpots(); //重新載入資料
+        })
+     
+       //景點分類搜尋
+        const selectCategory = categoryId => {
+            searchData.categoryId = categoryId;
+            searchData.keyword = "";
+            searchData.page = 1;
+            loadSpots();
+        }
+           </script>
 }
